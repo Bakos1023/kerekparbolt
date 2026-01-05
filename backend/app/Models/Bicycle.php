@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bicycle extends Model
 {
-    //
+    protected $fillable = ["name",
+"wheel_size",
+"gears",
+"sex",
+"type",
+"size",
+"color",
+"manufacturer_id",];
 }

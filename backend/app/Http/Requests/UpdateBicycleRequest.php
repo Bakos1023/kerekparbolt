@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBicycleRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateBicycleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,15 @@ class UpdateBicycleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+             "name"=>["required", "string","max:80"],
+             "wheel_size"=>["required","numeric"],
+             "gears"=>["required","integer","between:1,30"],
+             "sex"=>["required","string","in:férfi,női,unisex" ],
+             "type"=>["required","string", Rule::in(["MTB","városi","országúti","cross"])],
+             "size"=>["nullable", "string", "max:10"],
+             "color"=>["nullable", "string","max:20"],
+             "manufacturer_id"=>["required","integer", "exists:manufacturers,id"],
+
         ];
     }
 }

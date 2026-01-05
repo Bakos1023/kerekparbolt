@@ -6,7 +6,9 @@ use App\Http\Requests\StoreBicycleRequest;
 use App\Http\Requests\UpdateBicycleRequest;
 use App\Http\Resources\BicycleResource;
 use App\Models\Bicycle;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 use Symfony\Component\HttpFoundation\Response;
 
 class BicycleController extends Controller
@@ -14,19 +16,28 @@ class BicycleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() :JsonResource
+    public function index(Request $request) :JsonResource
     {
-        $bicycles= Bicycle::query()->get();
-        return BicycleResource::collection($bicycles);
+        $query= Bicycle::query();
+        if($request->filled("sex"))
+        {
+            $query->where("sex","=",$request->query("sex"));
+
+        }
+        if($request->filled("type"))
+        {
+            $query->where("type","=",$request->query("type"));
+        }
+        return BicycleResource::collection($query->get());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBicycleRequest $request)
+    public function store(StoreBicycleRequest $request):JsonResource
     {
-        $data=$request->validated();
-        
+        return new BicycleResource(Bicycle::create($request->validated()));
+
     }
 
     /**
@@ -42,7 +53,8 @@ class BicycleController extends Controller
      */
     public function update(UpdateBicycleRequest $request, Bicycle $bicycle)
     {
-        //
+        $bicycle->update($request->validated());
+        return new BicycleResource($bicycle);
     }
 
     /**

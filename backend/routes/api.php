@@ -10,4 +10,4 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 Route::apiResource("/manufacturers",ManufacturerController::class)->whereNumber("manufacturer")->only(["index","show","destroy","store","update"]);
-Route::apiResource("/bicycles",BicycleController::class)->whereNumber("bicycle");
+Route::apiResource("/bicycles",BicycleController::class)->whereNumber("bicycle")->only(["index","show","destroy","store","update"]);
